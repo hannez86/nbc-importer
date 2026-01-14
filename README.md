@@ -2,21 +2,10 @@
 
 Tampermonkey-Script zum Exportieren von Taskcards-Boards im JSON-Format für den Import in die Niedersächsische Bildungscloud (NBC).
 
-## Version 2.1 - Automatischer Import!
-
-🎉 **NEU: Automatischer Import für Kanban-Boards!**
-- Importierte Boards werden jetzt **automatisch auf Taskcards nachgebaut**
-- Spalten und Karten werden per UI-Automation erstellt
-- Titel und Inhalte werden automatisch übertragen
-
-✨ **Unterstützt beide Board-Typen:**
-- **Kanban/Pinnwand-Boards** mit Spalten und Karten (Export + automatischer Import)
-- **Tafel/Chalkboard-Boards** mit frei positionierbaren Karten und Verbindungen (Export)
-
 ## Features
 
-### Export-Funktionalität
-- Vollständiger Export aller Board-Inhalte für beide Board-Typen
+### Export-Funktionalität bei Taskcards (taskcards-export-import.user.js)
+- Vollständiger Export aller Board-Inhalte für beide Board-Typen (Tafel und Pinnwand)
 - **Kanban-Boards:** Erfasst Spalten, Karten und deren Reihenfolge
 - **Tafel-Boards:** Erfasst Karten mit Positionen, Größen und Verbindungen
 - Extrahiert Titel, Beschreibungen, HTML-Inhalte
@@ -30,14 +19,13 @@ Tampermonkey-Script zum Exportieren von Taskcards-Boards im JSON-Format für den
 - Lädt JSON-Export-Dateien
 - Zeigt detaillierte Vorschau der Board-Struktur
 - Unterscheidet zwischen Kanban und Tafel
-- **NEU: Automatischer Import für Kanban-Boards**
+- Automatischer Import für Kanban-Boards
   - Erstellt Spalten automatisch
   - Erstellt Karten mit Titel und Inhalt
   - Nutzt UI-Automation für nahtlose Integration
   - Zeigt Fortschritt während des Imports
 - Validierung der Daten
 - Ausgabe in Browser-Konsole für NBC-Import
-- Zwischenablage-Funktion für schnelles Kopieren
 
 ### Exportierte Datenstruktur
 
@@ -175,12 +163,14 @@ Das Script exportiert unterschiedliche Strukturen je nach Board-Typ:
 2. **Script installieren**
    - Öffne Tampermonkey Dashboard
    - Klicke auf das "+" Symbol (Neues Script erstellen)
-   - Kopiere den Inhalt von `taskcards-export-import.user.js`
+   - Kopiere den Inhalt von `taskcards-export-import.user.js` (für den Export der Taskcard)
+   - Kopiere den Inhalt von 'nbc-import.user.js' in ein neues Script (für den Import in der NBC)
    - Speichere das Script (Strg+S)
 
 3. **Script aktivieren**
    - Das Script ist automatisch aktiv auf taskcards.de
    - Beim Besuch von Taskcards erscheinen zwei Buttons rechts oben
+   - In der NBC erscheint ein Import-Button
 
 ## Verwendung
 
@@ -221,136 +211,11 @@ Das Script exportiert unterschiedliche Strukturen je nach Board-Typ:
 
 1. Exportiere das Board von Taskcards
 2. Öffne die NBC
-3. Nutze die NBC-Import-Funktion (falls vorhanden)
-4. Lade die JSON-Datei hoch oder füge die Daten ein
+3. Erstelle in einem Raum einen leeren Bereich zum Import.
+4. Nutze die NBC-Import-Funktion über das Skript
+5. Lade die JSON-Datei hoch
 
-**Alternative für manuellen Import:**
-1. Nutze die Import-Vorschau im Script
-2. Öffne Browser-Entwicklertools (F12)
-3. Wechsle zur Konsole
-4. Kopiere die JSON-Daten zwischen den Markierungen
-5. Nutze diese Daten für die NBC-Integration
-
-## Anpassungen
-
-### Domain-Anpassungen
-
-Falls Taskcards unter einer anderen Domain läuft, passe die `@match` Zeilen an:
-
-```javascript
-// @match        https://ihre-domain.de/*
-```
-
-### Selektoren anpassen
-
-Falls sich die HTML-Struktur von Taskcards ändert, können die CSS-Selektoren in der Funktion `extractBoardData()` angepasst werden:
-
-```javascript
-// Beispiel für Titel-Selektor
-const titleElement = document.querySelector('h1.board-title, .board-header h1, [data-board-title], .title');
-```
-
-### Erweiterte Datenextraktion
-
-Um zusätzliche Daten zu exportieren, erweitere das `cardData` Objekt:
-
-```javascript
-cardData.customField = card.querySelector('.custom-selector')?.textContent || '';
-```
-
-## Fehlerbehebung
-
-### Buttons werden nicht angezeigt
-- Prüfe ob das Script in Tampermonkey aktiv ist
-- Überprüfe die Domain-Einstellungen
-- Lade die Seite neu (Strg+F5)
-
-### Export ist leer oder unvollständig
-- Die HTML-Struktur von Taskcards könnte sich geändert haben
-- Öffne die Browser-Konsole (F12) und prüfe auf Fehler
-- Passe die CSS-Selektoren an
-
-### Import funktioniert nicht
-- Prüfe ob die JSON-Datei gültig ist
-- Validiere das JSON-Format mit einem Online-Validator
-- Prüfe die Browser-Konsole auf Fehlermeldungen
-
-## Technische Details
-
-- **Version:** 1.0.0
-- **Tampermonkey API:** GM_addStyle, GM_download
-- **Kompatibilität:** Chrome, Firefox, Edge (mit Tampermonkey)
-- **Ausführung:** document-idle (nach vollständigem Laden der Seite)
-
-## Entwicklung
-
-### Script anpassen
-
-1. Öffne Tampermonkey Dashboard
-2. Finde das Script in der Liste
-3. Klicke auf "Bearbeiten"
-4. Nimm deine Änderungen vor
-5. Speichere (Strg+S)
-6. Lade die Taskcards-Seite neu
-
-### Debugging
-
-```javascript
-// Debug-Modus aktivieren
-console.log('=== BOARD DATA ===');
-console.log(boardData);
-```
-
-## Zukünftige Erweiterungen
-
-- Automatischer Upload zu NBC (API-Integration)
-- Batch-Export mehrerer Boards
-- Differenz-Import (nur Änderungen)
-- Bilder herunterladen und lokal speichern
-- Unterstützung für weitere Plattformen
-- Automatische Backup-Funktion
 
 ## Lizenz
 
 Dieses Script steht unter der MIT-Lizenz und kann frei verwendet und angepasst werden.
-
-## Support
-
-Bei Fragen oder Problemen:
-1. Prüfe die Fehlerbehebung oben
-2. Öffne ein Issue im Repository
-3. Kontaktiere den Entwickler
-
-## Changelog
-
-### Version 2.1.0 (2026-01-07)
-- **🎉 NEU:** Automatischer Import für Kanban-Boards
-- **NEU:** UI-Automation zum Erstellen von Spalten und Karten
-- **NEU:** "Automatisch importieren"-Button im Import-Modal
-- **NEU:** Fortschrittsanzeige während des Imports
-- **NEU:** `sleep()` Hilfsfunktion für zeitgesteuerte Aktionen
-- **NEU:** `createColumn()` - Erstellt Spalten automatisch
-- **NEU:** `createCard()` - Erstellt Karten mit Titel und Inhalt
-- **NEU:** `importKanbanBoard()` - Orchestriert den vollständigen Import
-- **VERBESSERT:** Bessere Fehlerbehandlung beim Import
-- Automatisches Setzen von Titeln und HTML-Inhalten
-
-### Version 2.0.0 (2026-01-07)
-- **NEU:** Unterstützung für beide Board-Typen (Kanban und Tafel)
-- **NEU:** Automatische Erkennung des Board-Typs
-- **NEU:** Export von Karten-Positionen und -Größen bei Tafel-Boards
-- **NEU:** Export von Verbindungen zwischen Karten (mit Labels und SVG-Pfaden)
-- **NEU:** Export von Board-Links (Thumbnails zu anderen Boards)
-- **NEU:** Erkennung von eingebetteten Videos und Medien
-- **VERBESSERT:** Genauere Extraktion basierend auf echter Taskcards-DOM-Struktur
-- **VERBESSERT:** Dateinamen-Extraktion aus S3-URLs
-- **VERBESSERT:** Import-Vorschau unterscheidet zwischen Board-Typen
-- Angepasst an Taskcards-Selektoren: `.draggableList`, `.chalkboard-card`, `.board-card`
-- Optimierte Statistiken je nach Board-Typ
-
-### Version 1.0.0 (2026-01-07)
-- Initiale Version
-- Export-Funktionalität für Boards
-- Import-Funktionalität mit Vorschau
-- UI-Buttons und Modal-Dialoge
-- JSON-Format optimiert für NBC-Import
